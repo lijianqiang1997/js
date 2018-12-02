@@ -1,4 +1,4 @@
-window.onDOMContentLoaded = function() {
+document.addEventListener("DOMContentLoaded", function() {
     var elements = document.getElementsByTagName("*"),
         elementArray = Array.prototype.slice.call(elements),
         marginArr = [],
@@ -120,4 +120,4 @@ window.onDOMContentLoaded = function() {
     styleElement.innerHTML = style;
     document.head.appendChild(styleElement);
     console.log(style);
-}
+}, false);
