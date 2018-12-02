@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
         marginArr = [],
         paddingArr = [],
         fontArr = [],
+        lineHeightArr = [],
         style = "";
     elementArray.forEach(function(item, index, array) {
         var className = " " + item.className.replace(/\s/g, "  ") + " ",
@@ -12,10 +13,12 @@ document.addEventListener("DOMContentLoaded", function() {
             padRegStr = "\\spad(-\\d+|" + str + ")\\s",
             marReg = new RegExp(marRegStr, "ig"),
             padReg = new RegExp(padRegStr, "ig"),
-            fontReg = /font-\d+/,
+            fontReg = /\sfont-\d+\s/,
+            lineHeightReg = /\sline-height-\d+\s/,
             marArr = className.match(marReg),
             padArr = className.match(padReg),
-            font = className.match(fontReg);
+            font = className.match(fontReg),
+            lineHeight = className.match(lineHeightReg);
         if (marArr) {
             marginArr = marginArr.concat(marArr);
         }
@@ -25,10 +28,14 @@ document.addEventListener("DOMContentLoaded", function() {
         if (font) {
             fontArr = fontArr.concat(font);
         }
+        if (lineHeight) {
+            lineHeightArr = lineHeightArr.concat(lineHeight);
+        }
     });
     marginArr = [...new Set(marginArr)];
     paddingArr = [...new Set(paddingArr)];
     fontArr = [...new Set(fontArr)];
+    lineHeightArr = [...new Set(lineHeightArr)];
     marginArr.forEach(function(item, index, array) {
         var str = "-(t|r|b|l|tb|rl)-\\d+",
             number,
@@ -114,6 +121,11 @@ document.addEventListener("DOMContentLoaded", function() {
         item = item.trim();
         var fontSize = item.split("font-")[1];
         style += "." + item + "{font-size: " + fontSize + "px;}\n";
+    });
+    lineHeightArr.forEach(function(item, index, array) {
+        item = item.trim();
+        var lineHeight = item.split("line-height-")[1];
+        style += "." + item + "{line-height: " + lineHeight + "px;}\n";
     });
 
     var styleElement = document.createElement("style");
