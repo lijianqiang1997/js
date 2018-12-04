@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html {
+            height: 100%;
+        }
+        
+        body {
+            height: 100%;
+            margin: 0;
+            text-align: center;
+        }
+        
+        textarea {
+            width: 40%;
+            height: 100%;
+        }
+        
+        textarea+textarea {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea name="" id="code1" cols="30" rows="10"></textarea>
+    <textarea name="" id="code2" cols="30" rows="10" contenteditable="false"></textarea>
+
+    <script>
+        var code1 = document.getElementById("code1"),
+            code2 = document.getElementById("code2");
+
+        code1.addEventListener("beforePaste", function(event) {
+            var clipboardData = event.clipboardData || window.event,
+                data = clipboardData.getData("text").replace(/\s\s*/, ""),
+                arr,
+                s = "";
+            console.log(clipboardData.getData("text"));
+            if (clipboardData && /\.[\s\S]+{[^{}\.]*}/.test(data)) {
+                arr = data.match(/\.[^\.{}]+{[^{}\.]*}/mg);
+                arr = [...new Set(arr)];
+                arr.forEach(function(item, array, index) {
+                    s += item + "\n";
+                });
+                code2.value = s;
+            }
+        });
+        code1.addEventListener("blur", function(event) {
+            var data = this.value.replace(/\s\s*/, ""),
+                arr,
+                s = "";
+            if (data && /\.[\s\S]+{[^{}\.]*}/.test(data)) {
+                arr = data.match(/\.[^\.{}]+{[^{}\.]*}/mg);
+                arr = [...new Set(arr)];
+                arr.forEach(function(item, array, index) {
+                    s += item + "\n";
+                });
+                code2.value = s;
+            }
+        });
+    </script>
+</body>
+
+</html>
