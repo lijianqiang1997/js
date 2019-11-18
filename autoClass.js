@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var elements = document.getElementsByTagName("*"),
+    var elements = document.body.getElementsByTagName("*"),
         elementArray = Array.prototype.slice.call(elements),
+        widthArr = [],
         marginArr = [],
         paddingArr = [],
         fontArr = [],
@@ -13,19 +14,23 @@ document.addEventListener("DOMContentLoaded", function() {
             str = "(-(t|r|b|l|tb|rl|bt|lr)-\\d+){1,4}",
             marRegStr = "\\smar(-\\d+|" + str + ")\\s",
             padRegStr = "\\spad(-\\d+|" + str + ")\\s",
+            widthReg = /(w|width)-\d+(?:\.\d+)?/ig,
             marReg = new RegExp(marRegStr, "ig"),
             padReg = new RegExp(padRegStr, "ig"),
             fontReg = /\sfont-\d+\s/ig,
             lineHeightReg = /\sline-height-\d+\s/ig,
             colorReg = /\scolor-([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\s/ig,
             directionReg = /\s(top|right|bottom|left|t|r|b|l)--?\d+\s/ig,
+            wArr = className.match(widthReg),
             marArr = className.match(marReg),
             padArr = className.match(padReg),
             font = className.match(fontReg),
             lineHeight = className.match(lineHeightReg),
             color = className.match(colorReg),
             direction = className.match(directionReg);
-
+        if(wArr) {
+            widthArr = widthArr.concat(wArr)
+        }
         if (marArr) {
             marginArr = marginArr.concat(marArr);
         }
@@ -45,12 +50,18 @@ document.addEventListener("DOMContentLoaded", function() {
             directionArr = directionArr.concat(direction);
         }
     });
+    widthArr = [...new Set(widthArr)]
     marginArr = [...new Set(marginArr)];
     paddingArr = [...new Set(paddingArr)];
     fontArr = [...new Set(fontArr)];
     lineHeightArr = [...new Set(lineHeightArr)];
     colorArr = [...new Set(colorArr)];
     directionArr = [...new Set(directionArr)]
+    widthArr.forEach(function(item,index,array) {
+        item = item.trim();
+        var width = item.split("-")[1];
+        style += "." + item + "{width: " + width + "px;}\n";
+    })
     marginArr.forEach(function(item, index, array) {
         var str = "-(t|r|b|l|tb|rl)-\\d+",
             number,
